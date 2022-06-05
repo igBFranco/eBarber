@@ -17,6 +17,65 @@ class _TimesState extends State<Times> {
   DateTime? _myDateTime;
   String time = 'Selecione uma Data';
 
+
+confirm() {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Confirmar Agendamento?',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+            content: SizedBox(
+              height: 200,
+              width: 200,
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Text(
+                    "Sexta\n18 de março de 2022",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  
+                  ),
+                ),
+              ElevatedButton(
+                    onPressed: () {
+                    },
+                    child: Text('14:00'),
+                    style: ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
+                  ),
+              ]),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        
+                      },
+                      child: Text('Cancelar'),
+                      style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 223, 13, 13)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                      },
+                      child: Text('Confirmar'),
+                      style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 90, 223, 13)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,7 +380,9 @@ class _TimesState extends State<Times> {
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
-                      onPressed: () {},
+                    onPressed: () {
+                    confirm();
+                    },
                       child: Text(
                         "Agendar",
                         style: TextStyle(
