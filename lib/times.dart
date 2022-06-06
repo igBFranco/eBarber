@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import 'home.dart';
+
 class Times extends StatefulWidget {
   const Times({Key? key}) : super(key: key);
 
@@ -15,7 +17,74 @@ class _TimesState extends State<Times> {
     false,
   ];
   DateTime? _myDateTime;
-  String time = 'Selecione uma Data';
+  String time = '06/06/2022';
+
+  confirm() {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Confirmar Agendamento?',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            content: SizedBox(
+              height: 200,
+              width: 200,
+              child: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Text(
+                    "Segunda,\n06 de junho de 2022",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    "8:30",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: Color(0xFF0DA6DF),
+                      ),
+                      minimumSize: Size(80, 35)),
+                ),
+              ]),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancelar'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 223, 13, 13)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                        );
+                      },
+                      child: Text('Confirmar'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 90, 223, 13)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,13 +294,13 @@ class _TimesState extends State<Times> {
                         ),
                         Column(
                           children: [
-                            OutlinedButton(
+                            ElevatedButton(
                               onPressed: () {},
                               child: Text(
                                 "8:30",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
+                                    color: Colors.white),
                               ),
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
@@ -321,7 +390,9 @@ class _TimesState extends State<Times> {
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        confirm();
+                      },
                       child: Text(
                         "Agendar",
                         style: TextStyle(

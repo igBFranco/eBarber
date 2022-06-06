@@ -93,6 +93,57 @@ class HomeState extends State<Home> {
                       color: Color(0xFF0DA6DF)),
                 )),
           ),
+          Container(
+            padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+            child: ListTile(
+              visualDensity: VisualDensity(vertical: 4),
+              title: Text(
+                "Cabelo",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF666666)),
+              ),
+              subtitle: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text("R\$ 30,00",
+                        style: TextStyle(
+                            color: Color(0xFF0DA6DF),
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+              trailing: SizedBox(
+                height: 200,
+                child: Column(
+                  children: [
+                    Text("06/06/2022",
+                        style: TextStyle(
+                            color: Color(0xFF666666),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14)),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Text("8:30h",
+                          style: TextStyle(
+                              color: Color(0xFF0DA6DF),
+                              fontWeight: FontWeight.bold)),
+                    ),
+                    Chip(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      label: Text(
+                        "Marcado",
+                        style: TextStyle(fontSize: 13, color: Colors.white),
+                      ),
+                      backgroundColor: Color(0xFF1AD909),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.separated(
                 padding: const EdgeInsets.all(15),
