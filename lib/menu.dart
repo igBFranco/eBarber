@@ -17,13 +17,21 @@ class _MenuState extends State<Menu> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(color: Color(0xFF0DA6DF)),
-            child: Text(
-              'Olá, ',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 150, child: Image.asset('assets/images/user.png')),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Olá,\nIgor',
+                  style: TextStyle(
+                      color: Color(0xFF0DA6DF),
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
           ),
           ListTile(
@@ -88,15 +96,16 @@ class _MenuState extends State<Menu> {
       ),
     );
   }
-  modalSair(){
-  return showDialog(
-    context: context,
+
+  modalSair() {
+    return showDialog(
+        context: context,
         builder: (_) {
           return AlertDialog(
             title: Text(
               'Deseja realmente sair?',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
@@ -104,16 +113,16 @@ class _MenuState extends State<Menu> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                      },
+                      onPressed: () => Navigator.pop(context),
                       child: Text('Cancelar'),
-                      style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 223, 13, 13)),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 223, 13, 13)),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                       child: Text('Sair'),
-                      style: ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
+                      style:
+                          ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
                     ),
                   ],
                 ),
@@ -121,6 +130,5 @@ class _MenuState extends State<Menu> {
             ],
           );
         });
+  }
 }
-}
-
