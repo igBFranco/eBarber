@@ -70,6 +70,41 @@ class HomeState extends State<Home> {
         });
   }
 
+  modalDeletar() {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Deseja desmarcar o agendamento?',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancelar'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 223, 13, 13)),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Desmarcar'),
+                      style:
+                          ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +131,9 @@ class HomeState extends State<Home> {
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
             child: ListTile(
+              onLongPress: () {
+                modalDeletar();
+              },
               visualDensity: VisualDensity(vertical: 4),
               title: Text(
                 "Cabelo",
