@@ -1,3 +1,4 @@
+import 'package:ebarber/login.dart';
 import 'package:ebarber/services.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lista de Tarefas',
-      home: Home(),
+      home: Login(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.light(primary: const Color(0xFF0DA6DF)),
