@@ -1,4 +1,5 @@
 import 'package:ebarber/home.dart';
+import 'package:ebarber/login.dart';
 import 'package:ebarber/services.dart';
 import 'package:flutter/material.dart';
 
@@ -21,10 +22,10 @@ class _MenuState extends State<Menu> {
               children: [
                 SizedBox(
                     width: 150, child: Image.asset('assets/images/user.png')),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
-                Text(
+                const Text(
                   'Olá,\nIgor',
                   style: TextStyle(
                       color: Color(0xFF0DA6DF),
@@ -119,7 +120,13 @@ class _MenuState extends State<Menu> {
                           primary: Color.fromARGB(255, 223, 13, 13)),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Login()),
+                        );
+                      },
                       child: Text('Sair'),
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
