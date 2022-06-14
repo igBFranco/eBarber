@@ -118,15 +118,18 @@ class HomeState extends State<Home> {
       drawer: Menu(),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Text("Meus Agendamentos",
-                style: GoogleFonts.lexend(
-                  textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      color: Color(0xFF0DA6DF)),
-                )),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Text("Meus Agendamentos",
+                  style: GoogleFonts.lexend(
+                    textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Color(0xFF0DA6DF)),
+                  )),
+            ),
           ),
           Container(
             padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),

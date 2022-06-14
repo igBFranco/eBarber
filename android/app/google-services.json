@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "840385413394",
+    "project_id": "ebarber-2006d",
+    "storage_bucket": "ebarber-2006d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840385413394:android:36739858bac159052773cb",
+        "android_client_info": {
+          "package_name": "com.ebarber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840385413394-f0ji3bpmcqf9s7uqp78ng68jmb9httbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSl5tfBcK_SCS0cCdaHMsQPZpuv1dse74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840385413394-f0ji3bpmcqf9s7uqp78ng68jmb9httbi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "840385413394-hi9s90b61136bsvhf11hc8d659njms8h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ebarber"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840385413394:android:b4999b6556697d2e2773cb",
+        "android_client_info": {
+          "package_name": "com.example.ebarber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840385413394-f0ji3bpmcqf9s7uqp78ng68jmb9httbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSl5tfBcK_SCS0cCdaHMsQPZpuv1dse74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840385413394-f0ji3bpmcqf9s7uqp78ng68jmb9httbi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "840385413394-hi9s90b61136bsvhf11hc8d659njms8h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ebarber"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
