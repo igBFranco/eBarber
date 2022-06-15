@@ -223,6 +223,7 @@ class HomeState extends State<Home> {
         tooltip: 'Menu',
         child: const Icon(
           Icons.add,
+          color: Colors.white,
         ),
         backgroundColor: Color(0xFF1AD909),
       ),

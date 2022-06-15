@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -11,12 +12,12 @@ class Times extends StatefulWidget {
 }
 
 class _TimesState extends State<Times> {
-  List<bool> isSelected = [
-    true,
-    false,
-  ];
+  List<bool> isSelected = [false, false, false];
   DateTime? _myDateTime;
-  String time = '06/06/2022';
+  String time = "Selecione uma data";
+
+  final CollectionReference _services =
+      FirebaseFirestore.instance.collection('services');
 
   confirm() {
     return showDialog(
@@ -161,7 +162,7 @@ class _TimesState extends State<Times> {
                           borderColor: Color(0xFF0DA6DF),
                           selectedBorderColor: Color(0xFF0DA6DF),
                           borderRadius: BorderRadius.circular(5),
-                          children: <Widget>[
+                          children: [
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
@@ -172,7 +173,14 @@ class _TimesState extends State<Times> {
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "Alex",
+                                "Alan",
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Text(
+                                "Luigi",
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
