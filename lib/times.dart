@@ -22,7 +22,11 @@ class Times extends StatefulWidget {
 }
 
 class _TimesState extends State<Times> {
-  List<bool> isSelected = [false, false, false];
+  List<bool> isSelected = [
+    false,
+    false,
+    false,
+  ];
   DateTime? _myDateTime;
   String time = "Selecione uma data";
 
