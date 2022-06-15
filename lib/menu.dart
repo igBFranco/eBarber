@@ -1,7 +1,7 @@
 import 'package:ebarber/home.dart';
-import 'package:ebarber/login.dart';
 import 'package:ebarber/services.dart';
 import 'package:ebarber/servicesAdm.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatefulWidget {
@@ -130,11 +130,8 @@ class _MenuState extends State<Menu> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()),
-                        );
+                        Navigator.pop(context);
+                        FirebaseAuth.instance.signOut();
                       },
                       child: Text('Sair'),
                       style:
