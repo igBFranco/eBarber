@@ -1,3 +1,4 @@
+import 'package:ebarber/teste.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,7 +82,17 @@ class _ServicesState extends State<Services> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Times()),
+                                      builder: (context) => Times(
+                                            serviceId: documentSnapshot.id,
+                                            serviceName:
+                                                documentSnapshot['name'],
+                                            servicePrice:
+                                                documentSnapshot['price']
+                                                    .toString(),
+                                            serviceTime:
+                                                documentSnapshot['time']
+                                                    .toString(),
+                                          )),
                                 );
                               },
                               child: Text("Agendar"),

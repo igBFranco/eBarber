@@ -5,7 +5,17 @@ import 'package:intl/intl.dart';
 import 'home.dart';
 
 class Times extends StatefulWidget {
-  const Times({Key? key}) : super(key: key);
+  final String serviceId;
+  final String serviceName;
+  final String servicePrice;
+  final String serviceTime;
+  const Times(
+      {Key? key,
+      required this.serviceId,
+      required this.serviceName,
+      required this.servicePrice,
+      required this.serviceTime})
+      : super(key: key);
 
   @override
   State<Times> createState() => _TimesState();
@@ -62,7 +72,9 @@ class _TimesState extends State<Times> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => {
+                        Navigator.pop(context),
+                      },
                       child: Text('Cancelar'),
                       style: ElevatedButton.styleFrom(
                           primary: Color.fromARGB(255, 223, 13, 13)),
@@ -105,7 +117,7 @@ class _TimesState extends State<Times> {
             //    borderRadius: BorderRadius.circular(15)),
             child: ListTile(
               title: Text(
-                "Cabelo",
+                widget.serviceName,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -117,7 +129,7 @@ class _TimesState extends State<Times> {
                   padding: const EdgeInsets.only(top: 2.0),
                   child: Column(
                     children: [
-                      Text("R\$30,00",
+                      Text("R\$${widget.servicePrice},00",
                           style: TextStyle(
                               color: Color(0xFF0DA6DF),
                               fontWeight: FontWeight.bold)),
@@ -125,7 +137,7 @@ class _TimesState extends State<Times> {
                         width: 60,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 18),
-                          child: Text("30min"),
+                          child: Text("${widget.serviceTime}min"),
                         ),
                       ),
                     ],
