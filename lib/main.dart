@@ -1,8 +1,11 @@
 import 'package:ebarber/auth_page.dart';
+import 'package:ebarber/provider/google_sign_in.dart';
+import 'package:ebarber/teste.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'home.dart';
 
@@ -11,7 +14,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const Main());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => GoogleSignInProvider())
+    ], child: const Main()),
+  );
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -37,7 +44,7 @@ class Main extends StatelessWidget {
               child: Text('Something went Wrong!'),
             );
           } else if (snapshot.hasData) {
-            return Home();
+            return Teste();
           } else {
             return AuthPage();
           }

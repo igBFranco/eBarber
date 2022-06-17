@@ -1,8 +1,10 @@
 import 'package:ebarber/home.dart';
+import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/services.dart';
 import 'package:ebarber/servicesAdm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -19,18 +23,19 @@ class _MenuState extends State<Menu> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Row(
+            child: Column(
               children: [
                 SizedBox(
-                    width: 150, child: Image.asset('assets/images/user.png')),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  'Olá,\nIgor',
+                    width: 100,
+                    child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(user.photoURL!),
+                    )),
+                Text(
+                  'Olá,\n ${user.displayName}',
                   style: TextStyle(
                       color: Color(0xFF0DA6DF),
-                      fontSize: 25,
+                      fontSize: 23,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -131,6 +136,10 @@ class _MenuState extends State<Menu> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
+                        final provider = Provider.of<GoogleSignInProvider>(
+                            context,
+                            listen: false);
+                        provider.logout();
                         FirebaseAuth.instance.signOut();
                       },
                       child: Text('Sair'),

@@ -1,10 +1,12 @@
 import 'package:ebarber/forgot_password.dart';
 import 'package:ebarber/main.dart';
+import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   final VoidCallback onClickedSignUp;
@@ -114,6 +116,34 @@ class _LoginState extends State<Login> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     style: ElevatedButton.styleFrom(
+                      minimumSize: Size(200, 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final provider = Provider.of<GoogleSignInProvider>(
+                          context,
+                          listen: false);
+                      provider.googleLogin();
+                    },
+                    icon: SizedBox(
+                      child: Image.asset('assets/images/google.png'),
+                      height: 24,
+                    ),
+                    label: Text(
+                      "Entrar com o Google",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black54),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFFdedcdc),
                       minimumSize: Size(200, 50),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0)),
