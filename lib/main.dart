@@ -1,6 +1,6 @@
 import 'package:ebarber/auth_page.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
-import 'package:ebarber/teste.dart';
+import 'package:ebarber/perfil.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class Main extends StatelessWidget {
               child: Text('Something went Wrong!'),
             );
           } else if (snapshot.hasData) {
-            return Teste();
+            return Home();
           } else {
             return AuthPage();
           }

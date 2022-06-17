@@ -1,8 +1,10 @@
 import 'package:ebarber/home.dart';
+import 'package:ebarber/perfil.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/services.dart';
 import 'package:ebarber/servicesAdm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,23 +24,44 @@ class _MenuState extends State<Menu> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            child: Column(
-              children: [
-                SizedBox(
-                    width: 100,
-                    child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(user.photoURL!),
-                    )),
-                Text(
-                  'Olá,\n ${user.displayName}',
-                  style: TextStyle(
-                      color: Color(0xFF0DA6DF),
-                      fontSize: 23,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
+          SizedBox(
+            height: 250,
+            child: DrawerHeader(
+              child: Column(
+                children: [
+                  SizedBox(
+                      width: 100,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(user.photoURL!),
+                      )),
+                  RichText(
+                    text: TextSpan(
+                        text: 'Olá,\n',
+                        style: TextStyle(
+                            color: Color(0xFF666666),
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: user.displayName!,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Perfil()),
+                                );
+                              },
+                            style: TextStyle(
+                                color: Color(0xFF0DA6DF),
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ]),
+                  ),
+                ],
+              ),
             ),
           ),
           ListTile(
@@ -136,11 +159,11 @@ class _MenuState extends State<Menu> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
+                        FirebaseAuth.instance.signOut();
                         final provider = Provider.of<GoogleSignInProvider>(
                             context,
                             listen: false);
                         provider.logout();
-                        FirebaseAuth.instance.signOut();
                       },
                       child: Text('Sair'),
                       style:
