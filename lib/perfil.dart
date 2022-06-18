@@ -1,5 +1,4 @@
 import 'package:ebarber/menu.dart';
-import 'package:ebarber/models/task.dart';
 import 'package:ebarber/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,6 @@ class PerfilState extends State<Perfil> {
         ),
         backgroundColor: Color(0xFF0DA6DF),
       ),
-      drawer: Menu(),
       body: Column(
         children: [
           Container(

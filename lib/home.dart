@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebarber/menu.dart';
-import 'package:ebarber/models/task.dart';
 import 'package:ebarber/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,6 +13,24 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  final TextEditingController _phoneController = TextEditingController();
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+
+  final user = FirebaseAuth.instance.currentUser!;
+
+  Future createNewUserOnDatabase([DocumentSnapshot? documentSnapshot]) async {
+    if (documentSnapshot == null) {
+      await _users.doc(user.uid).set({
+        "name": user.displayName,
+        "email": user.email,
+        "phone": _phoneController.text
+      });
+    }
+    _phoneController.text = '';
+    Navigator.pop(context);
+  }
+
   modalDeletar() {
     return showDialog(
         context: context,
@@ -45,6 +64,28 @@ class HomeState extends State<Home> {
             ],
           );
         });
+  }
+
+  teste() {
+    if (user != null) {
+      if (user.metadata.creationTime!
+              .difference(user.metadata.lastSignInTime!)
+              .abs() <
+          Duration(seconds: 1)) {
+        print('Creating new user in Database');
+        createNewUserOnDatabase();
+      } else {
+        print('user already created');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(seconds: 2), () => teste());
+    });
   }
 
   @override

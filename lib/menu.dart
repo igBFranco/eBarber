@@ -3,6 +3,7 @@ import 'package:ebarber/perfil.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/services.dart';
 import 'package:ebarber/servicesAdm.dart';
+import 'package:ebarber/usersAdm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -113,8 +114,25 @@ class _MenuState extends State<Menu> {
               //Navigator.pop(context);
             },
           ),
+          ListTile(
+            title: Text(
+              'Users',
+              style: TextStyle(
+                  color: Color(0xFF0DA6DF),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const UsersAdm()),
+              );
+              //Navigator.pop(context);
+            },
+          ),
           SizedBox(
-            height: 350,
+            height: 200,
           ),
           ListTile(
             visualDensity: VisualDensity(vertical: 4),
@@ -158,12 +176,12 @@ class _MenuState extends State<Menu> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
                         FirebaseAuth.instance.signOut();
                         final provider = Provider.of<GoogleSignInProvider>(
                             context,
                             listen: false);
                         provider.logout();
+                        Navigator.pop(context);
                       },
                       child: Text('Sair'),
                       style:

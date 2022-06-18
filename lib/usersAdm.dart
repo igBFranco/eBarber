@@ -5,28 +5,31 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ebarber/times.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ServicesAdm extends StatefulWidget {
-  const ServicesAdm({Key? key}) : super(key: key);
+class UsersAdm extends StatefulWidget {
+  const UsersAdm({Key? key}) : super(key: key);
 
   @override
-  _ServicesAdmState createState() => _ServicesAdmState();
+  _UsersAdmState createState() => _UsersAdmState();
 }
 
-class _ServicesAdmState extends State<ServicesAdm> {
+class _UsersAdmState extends State<UsersAdm> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
-  final CollectionReference _services =
-      FirebaseFirestore.instance.collection('services');
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+
+  final user = FirebaseAuth.instance.currentUser!;
 
   Future<void> _createOrUpdate([DocumentSnapshot? documentSnapshot]) async {
+    //print(_users.doc(user.uid).toString());
     String action = 'create';
     if (documentSnapshot != null) {
       action = 'update';
       _nameController.text = documentSnapshot['name'];
-      _priceController.text = documentSnapshot['price'].toString();
-      _timeController.text = documentSnapshot['time'].toString();
+      _emailController.text = documentSnapshot['email'];
+      _phoneController.text = documentSnapshot['phone'];
     }
 
     await showModalBottomSheet(
@@ -46,22 +49,18 @@ class _ServicesAdmState extends State<ServicesAdm> {
               children: [
                 TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Serviço'),
+                  decoration: const InputDecoration(labelText: 'Nome'),
                 ),
                 TextField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: false),
-                  controller: _priceController,
+                  controller: _emailController,
                   decoration: const InputDecoration(
-                    labelText: 'Preço',
+                    labelText: 'Email',
                   ),
                 ),
                 TextField(
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: false),
-                  controller: _timeController,
+                  controller: _phoneController,
                   decoration: const InputDecoration(
-                    labelText: 'Tempo',
+                    labelText: 'Phone',
                   ),
                 ),
                 const SizedBox(
@@ -71,25 +70,25 @@ class _ServicesAdmState extends State<ServicesAdm> {
                   child: Text(action == 'create' ? 'Adicionar' : 'Atualizar'),
                   onPressed: () async {
                     final String? name = _nameController.text;
-                    final int? price = int.tryParse(_priceController.text);
-                    final int? time = int.tryParse(_timeController.text);
-                    if (name != null && price != null) {
+                    final String? email = _emailController.text;
+                    final String? phone = _phoneController.text;
+                    if (name != null && email != null) {
                       if (action == 'create') {
                         // Persist a new product to Firestore
-                        await _services
-                            .add({"name": name, "price": price, "time": time});
+                        await _users.add(
+                            {"name": name, "email": email, "phone": phone});
                       }
 
                       if (action == 'update') {
                         // Update the product
-                        await _services.doc(documentSnapshot!.id).update(
-                            {"name": name, "price": price, "time": time});
+                        await _users.doc(user.uid).update(
+                            {"name": name, "email": email, "phone": phone});
                       }
 
                       // Clear the text fields
                       _nameController.text = '';
-                      _priceController.text = '';
-                      _timeController.text = '';
+                      _emailController.text = '';
+                      _phoneController.text = '';
 
                       // Hide the bottom sheet
                       Navigator.of(context).pop();
@@ -103,7 +102,7 @@ class _ServicesAdmState extends State<ServicesAdm> {
   }
 
   Future<void> _deleteProduct(String serviceId) async {
-    await _services.doc(serviceId).delete();
+    await _users.doc(serviceId).delete();
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(
@@ -115,7 +114,7 @@ class _ServicesAdmState extends State<ServicesAdm> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Lista de Serviços',
+          'Lista de Usuarios',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         backgroundColor: Color(0xFF0DA6DF),
@@ -128,7 +127,7 @@ class _ServicesAdmState extends State<ServicesAdm> {
               padding: EdgeInsets.all(20),
               child: Row(
                 children: [
-                  Text("Serviços",
+                  Text("Users",
                       style: GoogleFonts.lexend(
                         textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -140,7 +139,7 @@ class _ServicesAdmState extends State<ServicesAdm> {
             ),
           ),
           StreamBuilder(
-            stream: _services.snapshots(),
+            stream: _users.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
               if (streamSnapshot.hasData) {
                 return ListView.builder(
@@ -161,18 +160,13 @@ class _ServicesAdmState extends State<ServicesAdm> {
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF666666)),
                             ),
-                            subtitle: Row(
+                            subtitle: Column(
                               children: [
-                                Text(
-                                    "R\$ ${documentSnapshot['price'].toString()},00",
+                                Text(documentSnapshot['email'],
                                     style: TextStyle(
                                         color: Color(0xFF0DA6DF),
                                         fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                    "${documentSnapshot['time'].toString()}min")
+                                Text(documentSnapshot['phone'])
                               ],
                             ),
                             trailing: SizedBox(
