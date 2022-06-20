@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebarber/menu.dart';
 import 'package:ebarber/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,27 +87,43 @@ class PerfilState extends State<Perfil> {
                     ],
                   ),
                 ),
-                ListTile(
-                  visualDensity: VisualDensity(vertical: 4),
-                  title: Text(
-                    'Telefone',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF666666)),
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(user.email!,
-                            style: TextStyle(
-                                color: Color(0xFF0DA6DF),
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
+                FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .get(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasError)
+                      return Text('Error = ${snapshot.error}');
+
+                    if (snapshot.hasData) {
+                      var data = snapshot.data!.data();
+                      var value = data!['phone']; // <-- Your value
+                      return ListTile(
+                        visualDensity: VisualDensity(vertical: 4),
+                        title: Text(
+                          'Telefone',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF666666)),
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(value,
+                                  style: TextStyle(
+                                      color: Color(0xFF0DA6DF),
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                )
               ],
             ),
           ),

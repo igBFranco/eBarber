@@ -36,30 +36,34 @@ class _MenuState extends State<Menu> {
                         radius: 50,
                         backgroundImage: NetworkImage(user.photoURL!),
                       )),
-                  RichText(
-                    text: TextSpan(
-                        text: 'Olá,\n',
-                        style: TextStyle(
-                            color: Color(0xFF666666),
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold),
-                        children: [
-                          TextSpan(
-                            text: user.displayName!,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Perfil()),
-                                );
-                              },
-                            style: TextStyle(
-                                color: Color(0xFF0DA6DF),
-                                fontSize: 23,
-                                fontWeight: FontWeight.bold),
-                          )
-                        ]),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      text: TextSpan(
+                          text: 'Olá,\n',
+                          style: TextStyle(
+                              color: Color(0xFF666666),
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold),
+                          children: [
+                            TextSpan(
+                              text: user.displayName!,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Perfil()),
+                                  );
+                                },
+                              style: TextStyle(
+                                  color: Color(0xFF0DA6DF),
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ]),
+                    ),
                   ),
                 ],
               ),
@@ -176,11 +180,11 @@ class _MenuState extends State<Menu> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        FirebaseAuth.instance.signOut();
                         final provider = Provider.of<GoogleSignInProvider>(
                             context,
                             listen: false);
                         provider.logout();
+                        FirebaseAuth.instance.signOut();
                         Navigator.pop(context);
                       },
                       child: Text('Sair'),

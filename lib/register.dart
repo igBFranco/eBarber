@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebarber/main.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:email_validator/email_validator.dart';
@@ -14,6 +15,26 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+
+  Future createNewUserOnDatabase([DocumentSnapshot? documentSnapshot]) async {
+    final user = FirebaseAuth.instance.currentUser!;
+
+    if (documentSnapshot == null) {
+      await _users.doc(user.uid).set({
+        "name": nameController.text,
+        "email": user.email,
+        "phone": phoneController.text
+      });
+      user.updateDisplayName(nameController.text);
+      user.updatePhotoURL(
+          'https://cdn-icons-png.flaticon.com/512/7752/7752992.png');
+    }
+    //phoneController.text = '';
+    //Navigator.pop(context);
+  }
+
   Future signUp() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
@@ -27,6 +48,7 @@ class _RegisterState extends State<Register> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+      createNewUserOnDatabase();
     } on FirebaseAuthException catch (e) {
       print(e);
 
@@ -36,6 +58,8 @@ class _RegisterState extends State<Register> {
   }
 
   final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -76,6 +100,7 @@ class _RegisterState extends State<Register> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: nameController,
                       decoration: InputDecoration(
                           labelText: 'Nome', border: OutlineInputBorder()),
                     ),
@@ -83,6 +108,7 @@ class _RegisterState extends State<Register> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: phoneController,
                       decoration: InputDecoration(
                         labelText: 'Telefone',
                         border: OutlineInputBorder(),

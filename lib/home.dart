@@ -13,23 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  final TextEditingController _phoneController = TextEditingController();
-  final CollectionReference _users =
-      FirebaseFirestore.instance.collection('users');
-
   final user = FirebaseAuth.instance.currentUser!;
-
-  Future createNewUserOnDatabase([DocumentSnapshot? documentSnapshot]) async {
-    if (documentSnapshot == null) {
-      await _users.doc(user.uid).set({
-        "name": user.displayName,
-        "email": user.email,
-        "phone": _phoneController.text
-      });
-    }
-    _phoneController.text = '';
-    Navigator.pop(context);
-  }
 
   modalDeletar() {
     return showDialog(
@@ -64,28 +48,6 @@ class HomeState extends State<Home> {
             ],
           );
         });
-  }
-
-  teste() {
-    if (user != null) {
-      if (user.metadata.creationTime!
-              .difference(user.metadata.lastSignInTime!)
-              .abs() <
-          Duration(seconds: 1)) {
-        print('Creating new user in Database');
-        createNewUserOnDatabase();
-      } else {
-        print('user already created');
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(seconds: 2), () => teste());
-    });
   }
 
   @override
