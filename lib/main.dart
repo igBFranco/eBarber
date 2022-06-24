@@ -1,5 +1,5 @@
 import 'package:ebarber/auth_page.dart';
-import 'package:ebarber/load.dart';
+import 'package:ebarber/home.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,17 +35,17 @@ class Main extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Center(
+            return const Center(
               child: Text('Something went Wrong!'),
             );
           } else if (snapshot.hasData) {
-            return Loading();
+            return Home();
           } else {
-            return AuthPage();
+            return const AuthPage();
           }
         },
       ),

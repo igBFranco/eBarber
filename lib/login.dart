@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ebarber/forgot_password.dart';
+import 'package:ebarber/home.dart';
 import 'package:ebarber/main.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/utils/utils.dart';
@@ -18,6 +20,62 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _phoneController = TextEditingController();
+  final CollectionReference _users =
+      FirebaseFirestore.instance.collection('users');
+
+  Future createNewUserOnDatabase([DocumentSnapshot? documentSnapshot]) async {
+    final user = FirebaseAuth.instance.currentUser!;
+    if (documentSnapshot == null) {
+      await _users.doc(user.uid).set({
+        "name": user.displayName,
+        "email": user.email,
+        "phone": _phoneController.text
+      });
+    }
+    _phoneController.text = '';
+  }
+
+  modalTelefone() {
+    return showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              'Digite seu número de telefone para mantermos contato!',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Telefone',
+                ),
+              ),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        createNewUserOnDatabase();
+                      },
+                      child: Text('Salvar telefone'),
+                      style:
+                          ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   Future signIn() async {
     showDialog(
         context: context,
@@ -129,7 +187,19 @@ class _LoginState extends State<Login> {
                       final provider = Provider.of<GoogleSignInProvider>(
                           context,
                           listen: false);
-                      provider.googleLogin();
+                      provider.googleLogin().then((user) async {
+                        if (user != null) {
+                          if (user.metadata.creationTime!
+                                  .difference(user.metadata.lastSignInTime!)
+                                  .abs() <
+                              Duration(seconds: 1)) {
+                            print('Creating new user in Database');
+                            modalTelefone();
+                          } else {
+                            print('user already created');
+                          }
+                        }
+                      });
                     },
                     icon: SizedBox(
                       child: Image.asset('assets/images/google.png'),

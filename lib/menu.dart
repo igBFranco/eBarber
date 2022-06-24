@@ -180,11 +180,11 @@ class _MenuState extends State<Menu> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        FirebaseAuth.instance.signOut();
                         final provider = Provider.of<GoogleSignInProvider>(
                             context,
                             listen: false);
                         provider.logout();
-                        FirebaseAuth.instance.signOut();
                         Navigator.pop(context);
                       },
                       child: Text('Sair'),

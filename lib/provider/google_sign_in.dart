@@ -24,6 +24,10 @@ class GoogleSignInProvider extends ChangeNotifier {
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final user = FirebaseAuth.instance.currentUser!;
+      return user;
+      
     } catch (e) {
       Utils.showSnackBar(e.toString());
     }
