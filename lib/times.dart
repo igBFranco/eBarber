@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -27,11 +28,20 @@ class _TimesState extends State<Times> {
     false,
     false,
   ];
-  DateTime? _myDateTime;
-  String time = "Selecione uma data";
+  DateTime? _myDate;
+  String date = "Selecione uma data";
+  List<String> barbers = [
+    "Felipe",
+    "Alan",
+    "Luigi",
+  ];
+
+  String barber = "";
 
   final CollectionReference _services =
       FirebaseFirestore.instance.collection('services');
+
+  final user = FirebaseAuth.instance.currentUser!;
 
   confirm() {
     return showDialog(
@@ -85,6 +95,7 @@ class _TimesState extends State<Times> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        addAppointment();
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Home()),
@@ -100,6 +111,19 @@ class _TimesState extends State<Times> {
             ],
           );
         });
+  }
+
+  addAppointment() async {
+    await FirebaseFirestore.instance
+        .collection('appointments')
+        .doc(user.uid)
+        .collection("user_appointments")
+        .add({
+      'service': widget.serviceId,
+      'status': 1,
+      'barber': barber,
+      'date': date
+    });
   }
 
   @override
@@ -182,21 +206,21 @@ class _TimesState extends State<Times> {
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "Felipe",
+                                barbers[0],
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "Alan",
+                                barbers[1],
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: Text(
-                                "Luigi",
+                                barbers[2],
                                 style: TextStyle(fontSize: 16),
                               ),
                             ),
@@ -208,10 +232,12 @@ class _TimesState extends State<Times> {
                                   index++) {
                                 if (index == newIndex) {
                                   isSelected[index] = true;
+                                  barber = barbers[index];
                                 } else {
                                   isSelected[index] = false;
                                 }
                               }
+                              print(barber);
                             });
                           },
                         ),
@@ -230,15 +256,15 @@ class _TimesState extends State<Times> {
                                   borderRadius: BorderRadius.circular(10.0)),
                             ),
                             onPressed: () async {
-                              _myDateTime = await showDatePicker(
+                              _myDate = await showDatePicker(
                                   context: context,
-                                  initialDate: _myDateTime ?? DateTime.now(),
+                                  initialDate: _myDate ?? DateTime.now(),
                                   firstDate: DateTime(2022),
                                   lastDate: DateTime(2025));
 
                               setState(() {
-                                time = DateFormat('dd/MM/yyyy')
-                                    .format(_myDateTime!);
+                                date =
+                                    DateFormat('dd/MM/yyyy').format(_myDate!);
                               });
                             },
                             child: Text(
@@ -248,7 +274,7 @@ class _TimesState extends State<Times> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
-                            time,
+                            date,
                             style: GoogleFonts.lexend(
                               textStyle: const TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -263,151 +289,40 @@ class _TimesState extends State<Times> {
                   Divider(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "8:00",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF0DA6DF)),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: Color(0xFF0DA6DF),
-                                    ),
-                                    minimumSize: Size(80, 35)),
+                    child: SizedBox(
+                      height: 150,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xFF0DA6DF),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
                               ),
-                              OutlinedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "9:30",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF0DA6DF)),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: Color(0xFF0DA6DF),
-                                    ),
-                                    minimumSize: Size(80, 35)),
+                              onPressed: () async {
+                                await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now());
+                              },
+                              child: Text(
+                                "Selecionar Hora",
+                                style: TextStyle(fontSize: 16),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              date,
+                              style: GoogleFonts.lexend(
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Color(0xFF666666)),
                               ),
-                              OutlinedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "11:00",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF0DA6DF)),
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: Color(0xFF0DA6DF),
-                                    ),
-                                    minimumSize: Size(80, 35)),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "8:30",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            ),
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "10:00",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            ),
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "11:30",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            )
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "9:00",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            ),
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "10:30",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            ),
-                            OutlinedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "13:00",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF0DA6DF)),
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Color(0xFF0DA6DF),
-                                  ),
-                                  minimumSize: Size(80, 35)),
-                            )
-                          ],
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Padding(

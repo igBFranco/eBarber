@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
     final user = FirebaseAuth.instance.currentUser!;
     if (documentSnapshot == null) {
       await _users.doc(user.uid).set({
+        "uid": user.uid,
         "name": user.displayName,
         "email": user.email,
         "phone": _phoneController.text
