@@ -119,7 +119,11 @@ class _TimesState extends State<Times> {
         .doc(user.uid)
         .collection("user_appointments")
         .add({
-      'service': widget.serviceId,
+      'service': {
+        'serviceId': widget.serviceId,
+        'serviceName': widget.serviceName,
+        'servicePrice': widget.servicePrice,
+      },
       'status': 1,
       'barber': barber,
       'date': date

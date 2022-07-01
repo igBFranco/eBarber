@@ -136,17 +136,23 @@ class _MenuState extends State<Menu> {
             },
           ),
           SizedBox(
-            height: 200,
+            height: 250,
           ),
           ListTile(
             visualDensity: VisualDensity(vertical: 4),
-            trailing: Image.asset('assets/images/logoMenu.png'),
-            title: Text(
-              'Sair',
-              style: TextStyle(
-                  color: Color(0xFFFF0101),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+            trailing: Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Image.asset('assets/images/logoMenu.png'),
+            ),
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Sair',
+                style: TextStyle(
+                    color: Color(0xFFFF0101),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
             onTap: () {
               modalSair();

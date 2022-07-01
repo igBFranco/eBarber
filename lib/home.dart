@@ -15,6 +15,14 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   final user = FirebaseAuth.instance.currentUser!;
 
+  final CollectionReference _appointments = FirebaseFirestore.instance
+      .collection('appointments')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .collection("user_appointments");
+
+  final CollectionReference _services =
+      FirebaseFirestore.instance.collection('services');
+
   modalDeletar() {
     return showDialog(
         context: context,
@@ -76,59 +84,105 @@ class HomeState extends State<Home> {
                   )),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-            child: ListTile(
-              onLongPress: () {
-                modalDeletar();
-              },
-              visualDensity: VisualDensity(vertical: 4),
-              title: Text(
-                "Cabelo",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF666666)),
-              ),
-              subtitle: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("R\$ 30,00",
-                        style: TextStyle(
-                            color: Color(0xFF0DA6DF),
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
-              trailing: SizedBox(
-                height: 200,
-                child: Column(
-                  children: [
-                    Text("06/06/2022",
-                        style: TextStyle(
-                            color: Color(0xFF666666),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14)),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Text("8:30h",
+          StreamBuilder(
+            stream: _appointments.snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+              if (streamSnapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final DocumentSnapshot documentSnapshot =
+                        streamSnapshot.data!.docs[index];
+                    return Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                      child: ListTile(
+                        onLongPress: () {
+                          modalDeletar();
+                        },
+                        visualDensity: VisualDensity(vertical: 4),
+                        title: Text(
+                          documentSnapshot['service']['serviceName'],
                           style: TextStyle(
-                              color: Color(0xFF0DA6DF),
-                              fontWeight: FontWeight.bold)),
-                    ),
-                    Chip(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Text(
-                        "Marcado",
-                        style: TextStyle(fontSize: 13, color: Colors.white),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF666666)),
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                  "R\$ ${documentSnapshot['service']['servicePrice']},00",
+                                  style: TextStyle(
+                                      color: Color(0xFF0DA6DF),
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        ),
+                        trailing: SizedBox(
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Text(documentSnapshot['date'],
+                                  style: TextStyle(
+                                      color: Color(0xFF666666),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14)),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 4.0),
+                                child: Text("8:30h",
+                                    style: TextStyle(
+                                        color: Color(0xFF0DA6DF),
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              if (documentSnapshot['status'] == 1) ...[
+                                const Chip(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  label: Text(
+                                    "Marcado",
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.white),
+                                  ),
+                                  backgroundColor: Color(0xFF1AD909),
+                                )
+                              ] else if (documentSnapshot['status'] == 2) ...[
+                                const Chip(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  label: Text(
+                                    "Encerrado",
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.white),
+                                  ),
+                                  backgroundColor: Color(0xFF666666),
+                                )
+                              ] else ...[
+                                const Chip(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  label: Text(
+                                    "Cancelado",
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.white),
+                                  ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 223, 13, 13),
+                                )
+                              ],
+                            ],
+                          ),
+                        ),
                       ),
-                      backgroundColor: Color(0xFF1AD909),
-                    )
-                  ],
-                ),
-              ),
-            ),
+                    );
+                  },
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
         ],
       ),
