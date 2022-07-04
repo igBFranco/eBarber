@@ -109,6 +109,8 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 11,
                       decoration: InputDecoration(
                         labelText: 'Telefone',
                         border: OutlineInputBorder(),
@@ -119,6 +121,7 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: 'Email',
                         border: OutlineInputBorder(),

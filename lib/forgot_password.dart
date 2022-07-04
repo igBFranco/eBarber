@@ -60,6 +60,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               padding: const EdgeInsets.all(20.0),
               child: TextFormField(
                 controller: emailController,
+                keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                     labelText: 'Email', border: OutlineInputBorder()),

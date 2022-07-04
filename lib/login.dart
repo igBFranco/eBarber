@@ -50,6 +50,8 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                maxLength: 11,
                 decoration: InputDecoration(
                   labelText: 'Telefone',
                 ),
@@ -134,6 +136,7 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                         labelText: 'Email', border: OutlineInputBorder()),
                   ),

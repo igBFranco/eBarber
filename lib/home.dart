@@ -23,7 +23,7 @@ class HomeState extends State<Home> {
   final CollectionReference _services =
       FirebaseFirestore.instance.collection('services');
 
-  modalDeletar() {
+  modalDeletar({required String id}) {
     return showDialog(
         context: context,
         builder: (_) {
@@ -45,7 +45,21 @@ class HomeState extends State<Home> {
                           primary: Color.fromARGB(255, 223, 13, 13)),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await FirebaseFirestore.instance
+                            .collection('appointments')
+                            .doc(user.uid)
+                            .collection("user_appointments")
+                            .doc(id)
+                            .update({'status': 3});
+
+                        print(id);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Agendamento desmarcado com sucesso!')));
+                        Navigator.pop(context);
+                      },
                       child: Text('Desmarcar'),
                       style:
                           ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
@@ -98,7 +112,7 @@ class HomeState extends State<Home> {
                       padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
                       child: ListTile(
                         onLongPress: () {
-                          modalDeletar();
+                          modalDeletar(id: documentSnapshot.id);
                         },
                         visualDensity: VisualDensity(vertical: 4),
                         title: Text(
@@ -148,7 +162,7 @@ class HomeState extends State<Home> {
                                   backgroundColor: Color(0xFF1AD909),
                                 )
                               ] else if (documentSnapshot['status'] == 2) ...[
-                                const Chip(
+                                Chip(
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   label: Text(
