@@ -1,5 +1,6 @@
 import 'package:ebarber/auth_page.dart';
 import 'package:ebarber/home.dart';
+import 'package:ebarber/home_adm.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,7 +44,12 @@ class Main extends StatelessWidget {
               child: Text('Something went Wrong!'),
             );
           } else if (snapshot.hasData) {
-            return Home();
+            if (FirebaseAuth.instance.currentUser!.uid ==
+                "5KPlIagOKIYtrtfRfDLWNhoEYpf2") {
+              return HomeAdm();
+            } else {
+              return Home();
+            }
           } else {
             return const AuthPage();
           }

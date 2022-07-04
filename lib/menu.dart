@@ -2,8 +2,6 @@ import 'package:ebarber/home.dart';
 import 'package:ebarber/perfil.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/services.dart';
-import 'package:ebarber/servicesAdm.dart';
-import 'package:ebarber/usersAdm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,143 +20,121 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          SizedBox(
-            height: 250,
-            child: DrawerHeader(
-              child: Column(
-                children: [
-                  SizedBox(
-                      width: 100,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(user.photoURL!),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      text: TextSpan(
-                          text: 'Olá,\n',
-                          style: TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold),
-                          children: [
-                            TextSpan(
-                              text: user.displayName!,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.pop(context);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Perfil()),
-                                  );
-                                },
-                              style: TextStyle(
-                                  color: Color(0xFF0DA6DF),
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ]),
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            SizedBox(
+              height: 220,
+              child: DrawerHeader(
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(user.photoURL!),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Olá,\n',
+                            style: TextStyle(
+                                color: Color(0xFF666666),
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text: user.displayName!,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Perfil()),
+                                    );
+                                  },
+                                style: TextStyle(
+                                    color: Color(0xFF0DA6DF),
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ]),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          ListTile(
-            title: Text(
-              'Home',
-              style: TextStyle(
-                  color: Color(0xFF0DA6DF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Home()),
-              );
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Novo Agendamento',
-              style: TextStyle(
-                  color: Color(0xFF0DA6DF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Services()),
-              );
-              //Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Sobre a Barbearia',
-              style: TextStyle(
-                  color: Color(0xFF0DA6DF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ServicesAdm()),
-              );
-              //Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text(
-              'Users',
-              style: TextStyle(
-                  color: Color(0xFF0DA6DF),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const UsersAdm()),
-              );
-              //Navigator.pop(context);
-            },
-          ),
-          SizedBox(
-            height: 250,
-          ),
-          ListTile(
-            visualDensity: VisualDensity(vertical: 4),
-            trailing: Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Image.asset('assets/images/logoMenu.png'),
-            ),
-            title: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Sair',
+            ListTile(
+              title: Text(
+                'Home',
                 style: TextStyle(
-                    color: Color(0xFFFF0101),
+                    color: Color(0xFF0DA6DF),
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Home()),
+                );
+              },
             ),
-            onTap: () {
-              modalSair();
-            },
-          ),
-        ],
+            ListTile(
+              title: Text(
+                'Novo Agendamento',
+                style: TextStyle(
+                    color: Color(0xFF0DA6DF),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Services()),
+                );
+                //Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Sobre a Barbearia',
+                style: TextStyle(
+                    color: Color(0xFF0DA6DF),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+              onTap: () {},
+            ),
+            SizedBox(
+              height: 280,
+            ),
+            ListTile(
+              visualDensity: VisualDensity(vertical: 4),
+              trailing: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Image.asset('assets/images/logoMenu.png'),
+              ),
+              title: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Sair',
+                  style: TextStyle(
+                      color: Color(0xFFFF0101),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              onTap: () {
+                modalSair();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

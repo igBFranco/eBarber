@@ -172,20 +172,23 @@ class _RegisterState extends State<Register> {
       bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
           elevation: 0,
-          child: RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-              style: TextStyle(color: Color(0xFF777777)),
-              text: 'Já possui uma conta?',
-              children: [
-                TextSpan(
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = widget.onClickedSignIn,
-                  text: ' Faça Login',
-                  style: TextStyle(
-                      color: Color(0xFF0DA6DF), fontWeight: FontWeight.bold),
-                ),
-              ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: TextStyle(color: Color(0xFF777777)),
+                text: 'Já possui uma conta?',
+                children: [
+                  TextSpan(
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = widget.onClickedSignIn,
+                    text: ' Faça Login',
+                    style: TextStyle(
+                        color: Color(0xFF0DA6DF), fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           )),
     );
