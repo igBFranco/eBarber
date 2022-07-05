@@ -1,13 +1,13 @@
-import 'package:ebarber/auth_page.dart';
-import 'package:ebarber/home.dart';
-import 'package:ebarber/home_adm.dart';
+import 'package:ebarber/screens/auth_page.dart';
+import 'package:ebarber/screens/home.dart';
+import 'package:ebarber/screens/home_adm.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
+import 'package:ebarber/utils/firebase_options.dart';
 import 'package:ebarber/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +46,7 @@ class Main extends StatelessWidget {
           } else if (snapshot.hasData) {
             if (FirebaseAuth.instance.currentUser!.uid ==
                 "5KPlIagOKIYtrtfRfDLWNhoEYpf2") {
-              return HomeAdm();
+              return const HomeAdm();
             } else {
               return Home();
             }
@@ -57,7 +57,7 @@ class Main extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.light(primary: const Color(0xFF0DA6DF)),
+        colorScheme: const ColorScheme.light(primary: Color(0xFF0DA6DF)),
       ),
     );
   }

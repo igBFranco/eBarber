@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ebarber/forgot_password.dart';
-import 'package:ebarber/home.dart';
+import 'package:ebarber/screens/forgot_password.dart';
+import 'package:ebarber/screens/home.dart';
 import 'package:ebarber/main.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
 import 'package:ebarber/utils/utils.dart';

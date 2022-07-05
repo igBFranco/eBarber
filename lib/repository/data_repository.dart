@@ -15,11 +15,11 @@ class DataRepository {
     return collection.add(user.toJson());
   }
   
-  void updatePet(User user) async {
+  void updateUser(User user) async {
     await collection.doc(user.uid).update(user.toJson());
   }
   
-  void deletePet(User user) async {
+  void deleteUser(User user) async {
     await collection.doc(user.uid).delete();
   }
 }

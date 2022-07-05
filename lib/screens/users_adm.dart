@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ebarber/times.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UsersAdm extends StatefulWidget {
@@ -106,7 +104,7 @@ class _UsersAdmState extends State<UsersAdm> {
 
     // Show a snackbar
     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Serviço deletado com sucesso!')));
+        const SnackBar(content: Text('Usuário deletado com sucesso!')));
   }
 
   @override
@@ -138,81 +136,75 @@ class _UsersAdmState extends State<UsersAdm> {
               ),
             ),
           ),
-          StreamBuilder(
-            stream: _users.snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-              if (streamSnapshot.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: streamSnapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    final DocumentSnapshot documentSnapshot =
-                        streamSnapshot.data!.docs[index];
-                    return Column(
-                      children: [
-                        Container(
-                          height: 80,
-                          child: ListTile(
-                            title: Text(
-                              documentSnapshot['name'],
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF666666)),
-                            ),
-                            subtitle: Column(
-                              children: [
-                                Text(documentSnapshot['email'],
-                                    style: TextStyle(
-                                        color: Color(0xFF0DA6DF),
-                                        fontWeight: FontWeight.bold)),
-                                Text(documentSnapshot['phone'])
-                              ],
-                            ),
-                            trailing: SizedBox(
-                              width: 100,
-                              child: Row(
+          Expanded(
+            child: StreamBuilder(
+              stream: _users.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                if (streamSnapshot.hasData) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: streamSnapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          streamSnapshot.data!.docs[index];
+                      return Column(
+                        children: [
+                          Container(
+                            height: 80,
+                            child: ListTile(
+                              title: Text(
+                                documentSnapshot['name'],
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF666666)),
+                              ),
+                              subtitle: Column(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      _createOrUpdate(documentSnapshot);
-                                    },
-                                    icon: Icon(Icons.edit),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      _deleteProduct(documentSnapshot.id);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Color.fromARGB(255, 223, 13, 13),
-                                    ),
-                                  ),
+                                  Text(documentSnapshot['email'],
+                                      style: TextStyle(
+                                          color: Color(0xFF0DA6DF),
+                                          fontWeight: FontWeight.bold)),
+                                  Text(documentSnapshot['phone'])
                                 ],
+                              ),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        _createOrUpdate(documentSnapshot);
+                                      },
+                                      icon: Icon(Icons.edit),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        _deleteProduct(documentSnapshot.id);
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Color.fromARGB(255, 223, 13, 13),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Divider(),
-                      ],
-                    );
-                  },
+                          Divider(),
+                        ],
+                      );
+                    },
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
+              },
+            ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _createOrUpdate(),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: Color(0xFF1AD909),
       ),
     );
   }

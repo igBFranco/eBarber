@@ -1,9 +1,10 @@
-import 'package:ebarber/home.dart';
-import 'package:ebarber/perfil.dart';
+import 'package:ebarber/screens/home.dart';
+import 'package:ebarber/screens/home_adm.dart';
+import 'package:ebarber/screens/perfil.dart';
 import 'package:ebarber/provider/google_sign_in.dart';
-import 'package:ebarber/services.dart';
-import 'package:ebarber/servicesAdm.dart';
-import 'package:ebarber/usersAdm.dart';
+import 'package:ebarber/screens/services.dart';
+import 'package:ebarber/screens/services_adm.dart';
+import 'package:ebarber/screens/users_adm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _MenuAdmState extends State<MenuAdm> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Home()),
+                MaterialPageRoute(builder: (context) => HomeAdm()),
               );
             },
           ),

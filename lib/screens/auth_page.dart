@@ -1,6 +1,6 @@
-import 'package:ebarber/register.dart';
+import 'package:ebarber/screens/register.dart';
 import 'package:flutter/material.dart';
-import 'package:ebarber/login.dart';
+import 'package:ebarber/screens/login.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);

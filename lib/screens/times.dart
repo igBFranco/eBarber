@@ -124,6 +124,7 @@ class _TimesState extends State<Times> {
         'serviceName': widget.serviceName,
         'servicePrice': widget.servicePrice,
       },
+      'client': user.displayName,
       'status': 1,
       'barber': barber,
       'date': date
