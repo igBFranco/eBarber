@@ -30,6 +30,7 @@ class _TimesState extends State<Times> {
   ];
   DateTime? _myDate;
   String date = "Selecione uma data";
+  String dateId = "";
   List<String> barbers = [
     "Felipe",
     "Alan",
@@ -42,6 +43,8 @@ class _TimesState extends State<Times> {
       FirebaseFirestore.instance.collection('services');
 
   final user = FirebaseAuth.instance.currentUser!;
+
+  final _times = FirebaseFirestore.instance.collection('times');
 
   confirm() {
     return showDialog(
@@ -127,7 +130,8 @@ class _TimesState extends State<Times> {
       'client': user.displayName,
       'status': 1,
       'barber': barber,
-      'date': date
+      'date': date,
+      'hour': date
     });
   }
 
@@ -262,14 +266,17 @@ class _TimesState extends State<Times> {
                             ),
                             onPressed: () async {
                               _myDate = await showDatePicker(
+                                  locale: Locale('pt', 'BR'),
                                   context: context,
                                   initialDate: _myDate ?? DateTime.now(),
-                                  firstDate: DateTime(2022),
+                                  firstDate: DateTime.now(),
                                   lastDate: DateTime(2025));
-
+                              print(_myDate);
                               setState(() {
                                 date =
                                     DateFormat('dd/MM/yyyy').format(_myDate!);
+                                dateId =
+                                    DateFormat('dd-MM-yyyy').format(_myDate!);
                               });
                             },
                             child: Text(
@@ -292,44 +299,67 @@ class _TimesState extends State<Times> {
                     ),
                   ),
                   Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: 150,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Color(0xFF0DA6DF),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
-                              ),
-                              onPressed: () async {
-                                await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now());
+                  if (date != "Selecione uma data") ...[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                          height: 250,
+                          child: Expanded(
+                            child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection('times')
+                                  .where(FieldPath.documentId,
+                                      isEqualTo: dateId)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                                if (streamSnapshot.hasData) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    primary: true,
+                                    itemCount: streamSnapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      final DocumentSnapshot documentSnapshot =
+                                          streamSnapshot.data!.docs[index];
+                                      return Column(
+                                        children: [
+                                          for (var i
+                                              in documentSnapshot['times'])
+                                            Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                  bottom: 10),
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  i['hour'],
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               },
-                              child: Text(
-                                "Selecionar Hora",
-                                style: TextStyle(fontSize: 16),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text(
-                              date,
-                              style: GoogleFonts.lexend(
-                                textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Color(0xFF666666)),
-                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                          )),
+                    )
+                  ] else ...[
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(""),
+                    )
+                  ],
                   Padding(
                     padding: EdgeInsets.all(10),
                     child: ElevatedButton(
