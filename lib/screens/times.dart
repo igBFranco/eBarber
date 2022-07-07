@@ -46,7 +46,7 @@ class _TimesState extends State<Times> {
 
   final _times = FirebaseFirestore.instance.collection('times');
 
-  confirm() {
+  confirm({required hour}) {
     return showDialog(
         context: context,
         builder: (_) {
@@ -63,14 +63,14 @@ class _TimesState extends State<Times> {
                 Padding(
                   padding: const EdgeInsets.all(30.0),
                   child: Text(
-                    "Segunda,\n06 de junho de 2022",
+                    date,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                 ),
                 ElevatedButton(
                   onPressed: () {},
                   child: Text(
-                    "8:30",
+                    hour,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white),
                   ),
@@ -98,7 +98,7 @@ class _TimesState extends State<Times> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        addAppointment();
+                        addAppointment(hour: hour);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Home()),
@@ -116,7 +116,7 @@ class _TimesState extends State<Times> {
         });
   }
 
-  addAppointment() async {
+  addAppointment({required hour}) async {
     await FirebaseFirestore.instance
         .collection('appointments')
         .doc(user.uid)
@@ -131,7 +131,7 @@ class _TimesState extends State<Times> {
       'status': 1,
       'barber': barber,
       'date': date,
-      'hour': date
+      'hour': hour,
     });
   }
 
@@ -303,7 +303,7 @@ class _TimesState extends State<Times> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                          height: 250,
+                          height: 350,
                           child: Expanded(
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
@@ -331,7 +331,18 @@ class _TimesState extends State<Times> {
                                                   right: 10,
                                                   bottom: 10),
                                               child: ElevatedButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  if (i['status'] == "1") {
+                                                    confirm(hour: i['hour']);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    'Horário não disponível')));
+                                                  }
+                                                },
                                                 child: Text(
                                                   i['hour'],
                                                   style: TextStyle(
@@ -360,24 +371,24 @@ class _TimesState extends State<Times> {
                       child: Text(""),
                     )
                   ],
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        confirm();
-                      },
-                      child: Text(
-                        "Agendar",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                    ),
-                  )
+                  // Padding(
+                  //   padding: EdgeInsets.all(10),
+                  //   child: ElevatedButton(
+                  //     onPressed: () {
+                  //       //confirm();
+                  //     },
+                  //     child: Text(
+                  //       "Agendar",
+                  //       style: TextStyle(
+                  //           fontWeight: FontWeight.bold, fontSize: 18),
+                  //     ),
+                  //     style: ElevatedButton.styleFrom(
+                  //       minimumSize: Size(200, 50),
+                  //       shape: RoundedRectangleBorder(
+                  //           borderRadius: BorderRadius.circular(20.0)),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),

@@ -147,7 +147,7 @@ class HomeState extends State<Home> {
                                         fontSize: 14)),
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 4.0),
-                                  child: Text("8:30h",
+                                  child: Text("${documentSnapshot['hour']}h",
                                       style: TextStyle(
                                           color: Color(0xFF0DA6DF),
                                           fontWeight: FontWeight.bold)),
