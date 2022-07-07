@@ -152,7 +152,7 @@ class HomeState extends State<Home> {
                                           color: Color(0xFF0DA6DF),
                                           fontWeight: FontWeight.bold)),
                                 ),
-                                if (documentSnapshot['status'] == 1) ...[
+                                if (documentSnapshot['appointmentStatus'] == 1) ...[
                                   const Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
@@ -163,7 +163,7 @@ class HomeState extends State<Home> {
                                     ),
                                     backgroundColor: Color(0xFF1AD909),
                                   )
-                                ] else if (documentSnapshot['status'] == 2) ...[
+                                ] else if (documentSnapshot['appointmentStatus'] == 2) ...[
                                   Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,

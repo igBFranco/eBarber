@@ -21,7 +21,7 @@ class HomeAdmState extends State<HomeAdm> {
       .collection('appointments')
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .collection("user_appointments")
-      .orderBy('date', descending: false);
+      .orderBy('hour', descending: false);
 
   final CollectionReference _services =
       FirebaseFirestore.instance.collection('services');
@@ -54,7 +54,7 @@ class HomeAdmState extends State<HomeAdm> {
                             .doc(user.uid)
                             .collection("user_appointments")
                             .doc(id)
-                            .update({'status': 3});
+                            .update({'appointmentStatus': 3});
 
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -188,7 +188,7 @@ class HomeAdmState extends State<HomeAdm> {
                                               color: Color(0xFF0DA6DF),
                                               fontWeight: FontWeight.bold)),
                                     ),
-                                    if (documentSnapshot['status'] == 1) ...[
+                                    if (documentSnapshot['appointmentStatus'] == 1) ...[
                                       const Chip(
                                         materialTapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
@@ -200,7 +200,7 @@ class HomeAdmState extends State<HomeAdm> {
                                         ),
                                         backgroundColor: Color(0xFF1AD909),
                                       )
-                                    ] else if (documentSnapshot['status'] ==
+                                    ] else if (documentSnapshot['appointmentStatus'] ==
                                         2) ...[
                                       const Chip(
                                         materialTapTargetSize:

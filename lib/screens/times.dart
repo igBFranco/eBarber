@@ -46,7 +46,7 @@ class _TimesState extends State<Times> {
 
   final _times = FirebaseFirestore.instance.collection('times');
 
-  confirm({required hour}) {
+  confirm({required hour, required String timeId}) {
     return showDialog(
         context: context,
         builder: (_) {
@@ -98,7 +98,7 @@ class _TimesState extends State<Times> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        addAppointment(hour: hour);
+                        addAppointment(hour: hour, timeId: timeId);
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Home()),
@@ -116,7 +116,7 @@ class _TimesState extends State<Times> {
         });
   }
 
-  addAppointment({required hour}) async {
+  addAppointment({required hour, required String timeId}) async {
     await FirebaseFirestore.instance
         .collection('appointments')
         .doc(user.uid)
@@ -128,10 +128,26 @@ class _TimesState extends State<Times> {
         'servicePrice': widget.servicePrice,
       },
       'client': user.displayName,
-      'status': 1,
+      'appointmentStatus': 1,
       'barber': barber,
       'date': date,
       'hour': hour,
+    });
+
+    await FirebaseFirestore.instance.collection('times').doc(dateId).update({
+      '$hour': {
+        'status': "2",
+        'service': {
+          'serviceId': widget.serviceId,
+          'serviceName': widget.serviceName,
+          'servicePrice': widget.servicePrice,
+        },
+        'client': user.displayName,
+        'appointmentStatus': 1,
+        'barber': barber,
+        'date': date,
+        'hour': hour,
+      },
     });
   }
 
@@ -266,7 +282,7 @@ class _TimesState extends State<Times> {
                             ),
                             onPressed: () async {
                               _myDate = await showDatePicker(
-                                  locale: Locale('pt', 'BR'),
+                                  locale: const Locale('pt', 'BR'),
                                   context: context,
                                   initialDate: _myDate ?? DateTime.now(),
                                   firstDate: DateTime.now(),
@@ -325,34 +341,50 @@ class _TimesState extends State<Times> {
                                         children: [
                                           for (var i
                                               in documentSnapshot['times'])
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 10,
-                                                  right: 10,
-                                                  bottom: 10),
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  if (i['status'] == "1") {
-                                                    confirm(hour: i['hour']);
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(
-                                                            const SnackBar(
-                                                                content: Text(
-                                                                    'Horário não disponível')));
-                                                  }
-                                                },
-                                                child: Text(
-                                                  i['hour'],
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
+                                            if (documentSnapshot[i['hour']]
+                                                    ['status'] ==
+                                                "1") ...[
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    bottom: 10),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    confirm(
+                                                        hour: i['hour'],
+                                                        timeId: documentSnapshot
+                                                            .id);
+                                                  },
+                                                  child: Text(
+                                                    i['hour'],
+                                                    style: TextStyle(
+                                                        fontSize: 22,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                            ] else ...[
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    bottom: 10),
+                                                child: ElevatedButton(
+                                                  onPressed: null,
+                                                  child: Text(
+                                                    i['hour'],
+                                                    style: TextStyle(
+                                                        fontSize: 22,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            ]
                                         ],
                                       );
                                     },
