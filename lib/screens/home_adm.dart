@@ -17,7 +17,7 @@ class HomeAdm extends StatefulWidget {
 
 class HomeAdmState extends State<HomeAdm> {
   DateTime? _myDate;
-  String date = "08-07-2022";
+  String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
 
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -119,7 +119,7 @@ class HomeAdmState extends State<HomeAdm> {
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('times')
-                  .doc('08-07-2022')
+                  .doc(date)
                   .collection('appointment')
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
