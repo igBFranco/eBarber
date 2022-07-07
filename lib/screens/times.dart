@@ -29,7 +29,7 @@ class _TimesState extends State<Times> {
     false,
   ];
   DateTime? _myDate;
-  String date = "Selecione uma data";
+  String date = "";
   String dateId = "";
   List<String> barbers = [
     "Felipe",
@@ -39,12 +39,7 @@ class _TimesState extends State<Times> {
 
   String barber = "";
 
-  final CollectionReference _services =
-      FirebaseFirestore.instance.collection('services');
-
   final user = FirebaseAuth.instance.currentUser!;
-
-  final _times = FirebaseFirestore.instance.collection('times');
 
   confirm({required hour, required String timeId}) {
     return showDialog(
@@ -64,21 +59,12 @@ class _TimesState extends State<Times> {
                   padding: const EdgeInsets.all(30.0),
                   child: Text(
                     date,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    hour,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Color(0xFF0DA6DF),
-                      ),
-                      minimumSize: Size(80, 35)),
+                Text(
+                  '$hour h',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ]),
             ),
@@ -137,17 +123,25 @@ class _TimesState extends State<Times> {
     await FirebaseFirestore.instance.collection('times').doc(dateId).update({
       '$hour': {
         'status': "2",
-        'service': {
-          'serviceId': widget.serviceId,
-          'serviceName': widget.serviceName,
-          'servicePrice': widget.servicePrice,
-        },
-        'client': user.displayName,
-        'appointmentStatus': 1,
-        'barber': barber,
-        'date': date,
-        'hour': hour,
       },
+    });
+
+    await FirebaseFirestore.instance
+        .collection('times')
+        .doc(dateId)
+        .collection("appointment")
+        .add({
+      'service': {
+        'serviceId': widget.serviceId,
+        'serviceName': widget.serviceName,
+        'servicePrice': widget.servicePrice,
+      },
+      'client': user.displayName,
+      'appointmentStatus': 1,
+      'barber': barber,
+      'date': date,
+      'hour': hour,
+      'dateId': dateId
     });
   }
 
@@ -315,11 +309,11 @@ class _TimesState extends State<Times> {
                     ),
                   ),
                   Divider(),
-                  if (date != "Selecione uma data") ...[
+                  if (date != "") ...[
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
-                          height: 350,
+                          height: 300,
                           child: Expanded(
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
@@ -344,43 +338,67 @@ class _TimesState extends State<Times> {
                                             if (documentSnapshot[i['hour']]
                                                     ['status'] ==
                                                 "1") ...[
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 10,
-                                                    bottom: 10),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    confirm(
-                                                        hour: i['hour'],
-                                                        timeId: documentSnapshot
-                                                            .id);
-                                                  },
-                                                  child: Text(
-                                                    i['hour'],
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.white),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFF0DA6DF),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  child: ListTile(
+                                                    onTap: () {
+                                                      confirm(
+                                                          hour: i['hour'],
+                                                          timeId:
+                                                              documentSnapshot
+                                                                  .id);
+                                                    },
+                                                    title: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 90),
+                                                      child: Text(
+                                                        '${i['hour']} horas',
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ] else ...[
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 10,
-                                                    bottom: 10),
-                                                child: ElevatedButton(
-                                                  onPressed: null,
-                                                  child: Text(
-                                                    i['hour'],
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.white),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFFBCBFC1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  child: ListTile(
+                                                    onTap: null,
+                                                    title: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 90),
+                                                      child: Text(
+                                                        '${i['hour']} horas',
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color:
+                                                                Colors.black54),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -400,27 +418,17 @@ class _TimesState extends State<Times> {
                   ] else ...[
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text(""),
+                      child: Text(
+                        "Selecione uma data para escolher o horário",
+                        style: GoogleFonts.lexend(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Color(0xFF666666)),
+                        ),
+                      ),
                     )
                   ],
-                  // Padding(
-                  //   padding: EdgeInsets.all(10),
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       //confirm();
-                  //     },
-                  //     child: Text(
-                  //       "Agendar",
-                  //       style: TextStyle(
-                  //           fontWeight: FontWeight.bold, fontSize: 18),
-                  //     ),
-                  //     style: ElevatedButton.styleFrom(
-                  //       minimumSize: Size(200, 50),
-                  //       shape: RoundedRectangleBorder(
-                  //           borderRadius: BorderRadius.circular(20.0)),
-                  //     ),
-                  //   ),
-                  // )
                 ],
               ),
             ),
