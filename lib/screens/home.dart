@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return HomeState();
@@ -147,12 +149,12 @@ class HomeState extends State<Home> {
                                         fontSize: 14)),
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 4.0),
-                                  child: Text("8:30h",
+                                  child: Text("${documentSnapshot['hour']}h",
                                       style: TextStyle(
                                           color: Color(0xFF0DA6DF),
                                           fontWeight: FontWeight.bold)),
                                 ),
-                                if (documentSnapshot['status'] == 1) ...[
+                                if (documentSnapshot['appointmentStatus'] == 1) ...[
                                   const Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
@@ -163,7 +165,7 @@ class HomeState extends State<Home> {
                                     ),
                                     backgroundColor: Color(0xFF1AD909),
                                   )
-                                ] else if (documentSnapshot['status'] == 2) ...[
+                                ] else if (documentSnapshot['appointmentStatus'] == 2) ...[
                                   Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,

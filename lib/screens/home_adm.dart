@@ -4,6 +4,7 @@ import 'package:ebarber/screens/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class HomeAdm extends StatefulWidget {
   const HomeAdm({Key? key}) : super(key: key);
@@ -15,18 +16,13 @@ class HomeAdm extends StatefulWidget {
 }
 
 class HomeAdmState extends State<HomeAdm> {
+  DateTime? _myDate;
+  String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
   final user = FirebaseAuth.instance.currentUser!;
 
-  final _appointments = FirebaseFirestore.instance
-      .collection('appointments')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection("user_appointments")
-      .orderBy('date', descending: false);
-
-  final CollectionReference _services =
-      FirebaseFirestore.instance.collection('services');
-
-  modalDeletar({required String id}) {
+  modalDeletar(
+      {required String id, required dateId, required hour, required clientId}) {
     return showDialog(
         context: context,
         builder: (_) {
@@ -50,12 +46,13 @@ class HomeAdmState extends State<HomeAdm> {
                     ElevatedButton(
                       onPressed: () async {
                         await FirebaseFirestore.instance
-                            .collection('appointments')
-                            .doc(user.uid)
-                            .collection("user_appointments")
-                            .doc(id)
-                            .update({'status': 3});
-
+                            .collection('times')
+                            .doc(dateId)
+                            .update({
+                          '$hour': {
+                            'status': "1",
+                          },
+                        });
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
@@ -79,10 +76,28 @@ class HomeAdmState extends State<HomeAdm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Home Adm',
+          'Home',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         backgroundColor: Color(0xFF0DA6DF),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              _myDate = await showDatePicker(
+                  locale: const Locale('pt', 'BR'),
+                  context: context,
+                  initialDate: _myDate ?? DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2025));
+              setState(() {
+                date = DateFormat('dd-MM-yyyy').format(_myDate!);
+              });
+              print(date);
+            },
+            icon: Icon(Icons.date_range),
+            tooltip: "Filtrar Agendamentos",
+          )
+        ],
       ),
       drawer: const MenuAdm(),
       body: Column(
@@ -91,7 +106,7 @@ class HomeAdmState extends State<HomeAdm> {
             alignment: Alignment.centerLeft,
             child: Container(
               padding: EdgeInsets.all(20),
-              child: Text("Meus Agendamentos",
+              child: Text("Agendamentos do dia",
                   style: GoogleFonts.lexend(
                     textStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -102,7 +117,11 @@ class HomeAdmState extends State<HomeAdm> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: _appointments.snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('times')
+                  .doc(date)
+                  .collection('appointment')
+                  .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (streamSnapshot.hasData) {
                   return ListView.builder(
@@ -118,7 +137,11 @@ class HomeAdmState extends State<HomeAdm> {
                                 left: 15, right: 15, bottom: 15),
                             child: ListTile(
                               onLongPress: () {
-                                modalDeletar(id: documentSnapshot.id);
+                                modalDeletar(
+                                    id: documentSnapshot.id,
+                                    hour: documentSnapshot['hour'],
+                                    dateId: documentSnapshot['dateId'],
+                                    clientId: documentSnapshot['clientId']);
                               },
                               visualDensity: VisualDensity(vertical: 4),
                               title: Text(
@@ -182,12 +205,14 @@ class HomeAdmState extends State<HomeAdm> {
                                             fontSize: 14)),
                                     Padding(
                                       padding: EdgeInsets.only(bottom: 4.0),
-                                      child: Text("8:30h",
+                                      child: Text(
+                                          "${documentSnapshot['hour']}h",
                                           style: TextStyle(
                                               color: Color(0xFF0DA6DF),
                                               fontWeight: FontWeight.bold)),
                                     ),
-                                    if (documentSnapshot['status'] == 1) ...[
+                                    if (documentSnapshot['appointmentStatus'] ==
+                                        1) ...[
                                       const Chip(
                                         materialTapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
@@ -199,7 +224,8 @@ class HomeAdmState extends State<HomeAdm> {
                                         ),
                                         backgroundColor: Color(0xFF1AD909),
                                       )
-                                    ] else if (documentSnapshot['status'] ==
+                                    ] else if (documentSnapshot[
+                                            'appointmentStatus'] ==
                                         2) ...[
                                       const Chip(
                                         materialTapTargetSize:
