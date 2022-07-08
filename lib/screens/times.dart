@@ -137,6 +137,7 @@ class _TimesState extends State<Times> {
         'servicePrice': widget.servicePrice,
       },
       'client': user.displayName,
+      'clientId': user.uid,
       'appointmentStatus': 1,
       'barber': barber,
       'date': date,
@@ -157,38 +158,29 @@ class _TimesState extends State<Times> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 60,
-            //decoration: BoxDecoration(
-            //    color: Color(0xFFBCBFC1),
-            //    borderRadius: BorderRadius.circular(15)),
-            child: ListTile(
-              title: Text(
-                widget.serviceName,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF666666)),
-              ),
-              trailing: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Column(
-                    children: [
-                      Text("R\$${widget.servicePrice},00",
-                          style: TextStyle(
-                              color: Color(0xFF0DA6DF),
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        width: 60,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 18),
-                          child: Text("${widget.serviceTime}min"),
-                        ),
-                      ),
-                    ],
-                  ),
+          ListTile(
+            title: Text(
+              widget.serviceName,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF666666)),
+            ),
+            trailing: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Column(
+                  children: [
+                    Text("R\$${widget.servicePrice},00",
+                        style: TextStyle(
+                            color: Color(0xFF0DA6DF),
+                            fontWeight: FontWeight.bold)),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18),
+                      child: Text("${widget.serviceTime}min"),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -210,111 +202,105 @@ class _TimesState extends State<Times> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      child: Center(
-                        child: ToggleButtons(
-                          isSelected: isSelected,
-                          selectedColor: Colors.white,
-                          fillColor: Color(0xFF0DA6DF),
-                          color: Color(0xFF0DA6DF),
-                          borderWidth: 1,
-                          borderColor: Color(0xFF0DA6DF),
-                          selectedBorderColor: Color(0xFF0DA6DF),
-                          borderRadius: BorderRadius.circular(5),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                barbers[0],
-                                style: TextStyle(fontSize: 16),
-                              ),
+                    child: Center(
+                      child: ToggleButtons(
+                        isSelected: isSelected,
+                        selectedColor: Colors.white,
+                        fillColor: Color(0xFF0DA6DF),
+                        color: Color(0xFF0DA6DF),
+                        borderWidth: 1,
+                        borderColor: Color(0xFF0DA6DF),
+                        selectedBorderColor: Color(0xFF0DA6DF),
+                        borderRadius: BorderRadius.circular(5),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              barbers[0],
+                              style: TextStyle(fontSize: 16),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                barbers[1],
-                                style: TextStyle(fontSize: 16),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              barbers[1],
+                              style: TextStyle(fontSize: 16),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                barbers[2],
-                                style: TextStyle(fontSize: 16),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              barbers[2],
+                              style: TextStyle(fontSize: 16),
                             ),
-                          ],
-                          onPressed: (int newIndex) {
-                            setState(() {
-                              for (int index = 0;
-                                  index < isSelected.length;
-                                  index++) {
-                                if (index == newIndex) {
-                                  isSelected[index] = true;
-                                  barber = barbers[index];
-                                } else {
-                                  isSelected[index] = false;
-                                }
+                          ),
+                        ],
+                        onPressed: (int newIndex) {
+                          setState(() {
+                            for (int index = 0;
+                                index < isSelected.length;
+                                index++) {
+                              if (index == newIndex) {
+                                isSelected[index] = true;
+                                barber = barbers[index];
+                              } else {
+                                isSelected[index] = false;
                               }
-                              print(barber);
-                            });
-                          },
-                        ),
+                            }
+                            print(barber);
+                          });
+                        },
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 150,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF0DA6DF),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
-                            ),
-                            onPressed: () async {
-                              _myDate = await showDatePicker(
-                                  locale: const Locale('pt', 'BR'),
-                                  context: context,
-                                  initialDate: _myDate ?? DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(2025));
-                              print(_myDate);
-                              setState(() {
-                                date =
-                                    DateFormat('dd/MM/yyyy').format(_myDate!);
-                                dateId =
-                                    DateFormat('dd-MM-yyyy').format(_myDate!);
-                              });
-                            },
-                            child: Text(
-                              "Selecionar Data",
-                              style: TextStyle(fontSize: 16),
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF0DA6DF),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                          ),
+                          onPressed: () async {
+                            _myDate = await showDatePicker(
+                                locale: const Locale('pt', 'BR'),
+                                context: context,
+                                initialDate: _myDate ?? DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2025));
+                            print(_myDate);
+                            setState(() {
+                              date = DateFormat('dd/MM/yyyy').format(_myDate!);
+                              dateId =
+                                  DateFormat('dd-MM-yyyy').format(_myDate!);
+                            });
+                          },
                           child: Text(
-                            date,
-                            style: GoogleFonts.lexend(
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Color(0xFF666666)),
-                            ),
+                            "Selecionar Data",
+                            style: TextStyle(fontSize: 16),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          date,
+                          style: GoogleFonts.lexend(
+                            textStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Color(0xFF666666)),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   Divider(),
                   if (date != "") ...[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                          height: 300,
+                    Expanded(
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Expanded(
+                            flex: 2,
                             child: StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection('times')
@@ -332,6 +318,7 @@ class _TimesState extends State<Times> {
                                       final DocumentSnapshot documentSnapshot =
                                           streamSnapshot.data!.docs[index];
                                       return Column(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           for (var i
                                               in documentSnapshot['times'])
@@ -414,7 +401,7 @@ class _TimesState extends State<Times> {
                               },
                             ),
                           )),
-                    )
+                    ),
                   ] else ...[
                     Padding(
                       padding: EdgeInsets.all(8),

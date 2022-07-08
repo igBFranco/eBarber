@@ -21,7 +21,8 @@ class HomeAdmState extends State<HomeAdm> {
 
   final user = FirebaseAuth.instance.currentUser!;
 
-  modalDeletar({required String id, required dateId, required hour}) {
+  modalDeletar(
+      {required String id, required dateId, required hour, required clientId}) {
     return showDialog(
         context: context,
         builder: (_) {
@@ -52,7 +53,6 @@ class HomeAdmState extends State<HomeAdm> {
                             'status': "1",
                           },
                         });
-
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
@@ -140,7 +140,8 @@ class HomeAdmState extends State<HomeAdm> {
                                 modalDeletar(
                                     id: documentSnapshot.id,
                                     hour: documentSnapshot['hour'],
-                                    dateId: documentSnapshot['dateId']);
+                                    dateId: documentSnapshot['dateId'],
+                                    clientId: documentSnapshot['clientId']);
                               },
                               visualDensity: VisualDensity(vertical: 4),
                               title: Text(
