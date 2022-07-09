@@ -28,40 +28,91 @@ class HomeAdmState extends State<HomeAdm> {
         builder: (_) {
           return AlertDialog(
             title: Text(
-              'Deseja desmarcar o agendamento?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              'Alterar status do Agendamento',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('Cancelar'),
-                      style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 223, 13, 13)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Cancelar'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF0DA6DF)),
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        await FirebaseFirestore.instance
-                            .collection('times')
-                            .doc(dateId)
-                            .update({
-                          '$hour': {
-                            'status': "1",
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                             await FirebaseFirestore.instance
+                                .collection('times')
+                                .doc(dateId)
+                                .collection('appointment')
+                                .doc(id)
+                                .update({'appointmentStatus': 2});
+
+                            // await FirebaseFirestore.instance
+                            //     .collection('appointments')
+                            //     .doc(clientId)
+                            //     .collection("user_appointments")
+                            //     .doc(id)
+                            //     .update({'appointmentStatus': 2});
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Agendamento concluído com sucesso!')));
+                            Navigator.pop(context);
                           },
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'Agendamento desmarcado com sucesso!')));
-                        Navigator.pop(context);
-                      },
-                      child: Text('Desmarcar'),
-                      style:
-                          ElevatedButton.styleFrom(primary: Color(0xFF0DA6DF)),
+                          child: Text('Concluir'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF1AD909)),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await FirebaseFirestore.instance
+                                .collection('times')
+                                .doc(dateId)
+                                .update({
+                              '$hour': {
+                                'status': "1",
+                              },
+                            });
+
+                            await FirebaseFirestore.instance
+                                .collection('times')
+                                .doc(dateId)
+                                .collection('appointment')
+                                .doc(id)
+                                .update({'appointmentStatus': 3});
+
+                            // await FirebaseFirestore.instance
+                            //     .collection('appointments')
+                            //     .doc(clientId)
+                            //     .collection("user_appointments")
+                            //     .doc(id)
+                            //     .update({'appointmentStatus': 3});
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Agendamento desmarcado com sucesso!')));
+                            Navigator.pop(context);
+                          },
+                          child: Text('Desmarcar'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(255, 223, 13, 13)),
+                        ),
+                      ],
                     ),
                   ],
                 ),
