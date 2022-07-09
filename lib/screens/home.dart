@@ -23,9 +23,6 @@ class HomeState extends State<Home> {
       .collection("user_appointments")
       .orderBy('date', descending: false);
 
-  final CollectionReference _services =
-      FirebaseFirestore.instance.collection('services');
-
   modalDeletar({required String id}) {
     return showDialog(
         context: context,
@@ -54,13 +51,13 @@ class HomeState extends State<Home> {
                             .doc(user.uid)
                             .collection("user_appointments")
                             .doc(id)
-                            .update({'status': 3});
+                            .update({'appointmentStatus': 3});
 
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
                                     'Agendamento desmarcado com sucesso!')));
-                        Navigator.pop(context);
                       },
                       child: Text('Desmarcar'),
                       style:
@@ -154,7 +151,8 @@ class HomeState extends State<Home> {
                                           color: Color(0xFF0DA6DF),
                                           fontWeight: FontWeight.bold)),
                                 ),
-                                if (documentSnapshot['appointmentStatus'] == 1) ...[
+                                if (documentSnapshot['appointmentStatus'] ==
+                                    1) ...[
                                   const Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
@@ -165,7 +163,9 @@ class HomeState extends State<Home> {
                                     ),
                                     backgroundColor: Color(0xFF1AD909),
                                   )
-                                ] else if (documentSnapshot['appointmentStatus'] == 2) ...[
+                                ] else if (documentSnapshot[
+                                        'appointmentStatus'] ==
+                                    2) ...[
                                   Chip(
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,

@@ -87,7 +87,7 @@ class HomeAdmState extends State<HomeAdm> {
                   locale: const Locale('pt', 'BR'),
                   context: context,
                   initialDate: _myDate ?? DateTime.now(),
-                  firstDate: DateTime.now(),
+                  firstDate: DateTime(2022),
                   lastDate: DateTime(2025));
               setState(() {
                 date = DateFormat('dd-MM-yyyy').format(_myDate!);

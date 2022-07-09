@@ -23,49 +23,47 @@ class _MenuState extends State<Menu> {
       child: SafeArea(
         child: ListView(
           children: <Widget>[
-            Expanded(
-              child: SizedBox(
-                height: 200,
-                child: DrawerHeader(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          width: 100,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(user.photoURL!),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Olá,\n',
-                              style: TextStyle(
-                                  color: Color(0xFF666666),
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold),
-                              children: [
-                                TextSpan(
-                                  text: user.displayName!,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Perfil()),
-                                      );
-                                    },
-                                  style: TextStyle(
-                                      color: Color(0xFF0DA6DF),
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ]),
-                        ),
+            SizedBox(
+              height: 200,
+              child: DrawerHeader(
+                child: Column(
+                  children: [
+                    SizedBox(
+                        width: 100,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(user.photoURL!),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Olá,\n',
+                            style: TextStyle(
+                                color: Color(0xFF666666),
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold),
+                            children: [
+                              TextSpan(
+                                text: user.displayName!,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Perfil()),
+                                    );
+                                  },
+                                style: TextStyle(
+                                    color: Color(0xFF0DA6DF),
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ]),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -112,26 +110,25 @@ class _MenuState extends State<Menu> {
               onTap: () {},
             ),
             ListTile(
-                visualDensity: VisualDensity(vertical: 4),
-                trailing: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Image.asset('assets/images/logoMenu.png'),
-                ),
-                title: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Sair',
-                    style: TextStyle(
-                        color: Color(0xFFFF0101),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-                onTap: () {
-                  modalSair();
-                },
+              visualDensity: VisualDensity(vertical: 4),
+              trailing: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Image.asset('assets/images/logoMenu.png'),
               ),
-          
+              title: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Sair',
+                  style: TextStyle(
+                      color: Color(0xFFFF0101),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              onTap: () {
+                modalSair();
+              },
+            ),
           ],
         ),
       ),
