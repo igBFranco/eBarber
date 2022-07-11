@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ebarber/screens/home_adm.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -85,10 +86,18 @@ class _TimesState extends State<Times> {
                     ElevatedButton(
                       onPressed: () {
                         addAppointment(hour: hour, timeId: timeId);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()),
-                        );
+                        if (FirebaseAuth.instance.currentUser!.uid ==
+                            "5KPlIagOKIYtrtfRfDLWNhoEYpf2") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeAdm()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Home()),
+                          );
+                        }
                       },
                       child: Text('Confirmar'),
                       style: ElevatedButton.styleFrom(

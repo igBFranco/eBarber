@@ -5,6 +5,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Register extends StatefulWidget {
   final VoidCallback onClickedSignIn;
@@ -74,103 +75,107 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Center(
-                    child: SizedBox(
-                        width: 100,
-                        child: Image.asset('assets/images/logo.png'))),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 25),
-                child: Center(
-                    child: Text(
-                  "Cadastro",
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                )),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: nameController,
-                        decoration: InputDecoration(
-                            labelText: 'Nome', border: OutlineInputBorder()),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: phoneController,
-                        keyboardType: TextInputType.phone,
-                        maxLength: 11,
-                        decoration: InputDecoration(
-                          labelText: 'Telefone',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(),
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (email) =>
-                            email != null && !EmailValidator.validate(email)
-                                ? 'Digite um email válido'
-                                : null,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: 'Senha',
-                          border: OutlineInputBorder(),
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) => value != null && value.length < 6
-                            ? 'A senha deve possuir pelo menos 6 caracteres'
-                            : null,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          signUp();
-                        },
-                        child: Text(
-                          "Cadastrar",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(200, 50),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                        ),
-                      ),
-                    ),
-                  ]),
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Center(
+                      child: SizedBox(
+                          width: 100,
+                          child: Image.asset('assets/images/logo.png'))),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 25),
+                  child: Center(
+                      child: Text(
+                    "Cadastro",
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                              labelText: 'Nome', border: OutlineInputBorder()),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: phoneController,
+                          keyboardType: TextInputType.phone,
+                          maxLength: 11,
+                          decoration: InputDecoration(
+                            labelText: 'Telefone',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (email) =>
+                              email != null && !EmailValidator.validate(email)
+                                  ? 'Digite um email válido'
+                                  : null,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: 'Senha',
+                            border: OutlineInputBorder(),
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) => value != null &&
+                                  value.length < 6
+                              ? 'A senha deve possuir pelo menos 6 caracteres'
+                              : null,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            signUp();
+                          },
+                          child: Text(
+                            "Cadastrar",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

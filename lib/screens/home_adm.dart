@@ -53,7 +53,7 @@ class HomeAdmState extends State<HomeAdm> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                             await FirebaseFirestore.instance
+                            await FirebaseFirestore.instance
                                 .collection('times')
                                 .doc(dateId)
                                 .collection('appointment')
@@ -172,6 +172,7 @@ class HomeAdmState extends State<HomeAdm> {
                   .collection('times')
                   .doc(date)
                   .collection('appointment')
+                  .orderBy('hour', descending: false)
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (streamSnapshot.hasData) {

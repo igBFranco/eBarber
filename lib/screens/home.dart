@@ -46,6 +46,7 @@ class HomeState extends State<Home> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
+                        Navigator.pop(context);
                         await FirebaseFirestore.instance
                             .collection('appointments')
                             .doc(user.uid)
@@ -53,7 +54,6 @@ class HomeState extends State<Home> {
                             .doc(id)
                             .update({'appointmentStatus': 3});
 
-                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
